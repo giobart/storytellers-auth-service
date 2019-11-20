@@ -56,6 +56,10 @@ def test_3_login(client, mock_login_user):
     token_cookie = reply.headers.getlist('Set-Cookie')
     assert token_cookie == []
 
+    mock_login_user.return_value.status_code = 405
+    reply = client.post('/auth/login', json=loginreq)
+    assert reply.status_code == 401
+
 
 # test the logout
 def test_4_logout(client, mock_login_user):
@@ -86,7 +90,7 @@ def test_4_logout(client, mock_login_user):
 
 
 # test the refresh token functionality
-def test_4_logout(client, mock_login_user):
+def test_5_refresh(client, mock_login_user):
     # Mock status code of response.
     mock_login_user.return_value.status_code = 200
     mock_login_user.return_value.json.return_value = json.dumps({"id": 2, "username": "test1", "password": "test1123"})
