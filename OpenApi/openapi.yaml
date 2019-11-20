@@ -1,0 +1,162 @@
+openapi: 3.0.0
+info:
+  title: Auth API
+  description: This API is used to authenticate a user
+  contact:
+    email: giovanni.bartolomeo.rg@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/giobarty/auth-service/1.0.0
+  description: Authentication Microservice for Storytellers Project
+tags:
+- name: Users_Authentication
+  description: Operations available to the users in order to authenticate
+paths:
+  /api/auth/login:
+    post:
+      tags:
+      - Users_Authentication
+      summary: log in the user to the system and set a cookie with the generated JWT
+        token
+      description: |
+        Passing username and password the service will check if the user exisst and if the password is valid and then set as a cookie 2 tokens
+        ( access_token that expires in 15 min, refresh_token that expires in 30 days and is usable only to obtain another access_token )
+      operationId: log_in
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      responses:
+        200:
+          description: user succesfully logged in
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: csrf_access_token=01573355-85b5-4688-b74c-1efa0e5c08d2; csrf_refresh_token=28b2b10a-50c0-4c7d-afb7-b8ad7b8cfcae
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        401:
+          description: Wrong credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+      security: []
+  /api/auth/logout:
+    post:
+      tags:
+      - Users_Authentication
+      summary: logout the user erasing the current cookie
+      description: "log out the user by forcing the browser to unsed the current cookie\n\
+        \      \n"
+      operationId: log_out
+      responses:
+        200:
+          description: user succesfully logged out
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: '{"Set-Cookie":"token=deleted; path=/; expires=Thu, 01 Jan
+                  1970 00:00:00 GMT"}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        401:
+          description: Wrong credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+      security:
+      - csrf_access_token: []
+  /api/auth/token-refresh:
+    post:
+      tags:
+      - Users_Authentication
+      summary: refresh the csrf_refresh_token
+      description: "refresh the last expired csrf_refresh_token using the current\
+        \ csrf_refresh_token\n      \n"
+      operationId: refresh_token
+      responses:
+        200:
+          description: token refreshed
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: '{"Set-Cookie":"csrf_access_token=01573355-85b5-4688-b74c-1efa0e5c08d2"}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        401:
+          description: Refresh token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+      security:
+      - csrf_refresh_token: []
+components:
+  schemas:
+    UserLogin:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: giobarty
+        password:
+          type: string
+          example: password1234
+    inline_response_200:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Logged in as giobarty
+    inline_response_401:
+      type: object
+      properties:
+        err:
+          type: string
+          example: error message
+    inline_response_200_1:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Logged out giobarty
+    inline_response_200_2:
+      type: object
+      properties:
+        message:
+          type: string
+          example: ok
+  securitySchemes:
+    csrf_access_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    csrf_refresh_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
