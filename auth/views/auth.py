@@ -7,7 +7,12 @@ from auth.utility.api_call import *
 auth = Blueprint('auth', __name__)
 
 
-''' /login for the user, set refresh token and access token'''
+''' 
+    /login for the user, set refresh token and access token
+    Tokens are composed of an identity object
+    created as following:
+        {"id":integer, "username":String, "password":String}
+'''
 
 
 @auth.route('/auth/login', methods=['POST'])
