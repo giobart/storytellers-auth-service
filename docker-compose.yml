@@ -3,5 +3,7 @@ services:
   auth:
     build: .
     ports:
-    -  "8000:8000"
+    -  "5005:5005"
+    environment:
+      USERS_API: "http://localhost:5001"
 

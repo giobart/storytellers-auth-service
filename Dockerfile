@@ -7,11 +7,11 @@ WORKDIR /usr/src/app
 
 # different path...
 ENV PYTHONPATH .
-ENV USERS_API_URL "http://127.0.0.1/stocazzo"
-ENV SERVICE_DICOVERY ""
+# ENV USERS_API "http://127.0.0.1:5001" uncomment this and place the right USERS_API url to test locally
+# ENV SERVICE_DICOVERY ""
 
 RUN pip install -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 5005
 
 CMD [ "python", "auth/app.py" ]

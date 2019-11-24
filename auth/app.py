@@ -23,7 +23,7 @@ def create_app():
     app.config['JWT_REFRESH_COOKIE_PATH'] = '/auth/token_refresh'
 
     # SET URL OF THE USERS SERVICE
-    if os.environ.get('USERS_API_URL'):
+    if os.environ.get('USERS_API'):
         auth.api_config['USERS_BASE_URL'] = os.environ.get('USERS_API_URL')
     else:
         auth.api_config['USERS_BASE_URL'] = USERS_BASE_URL
