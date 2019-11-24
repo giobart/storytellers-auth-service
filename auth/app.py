@@ -10,6 +10,7 @@ app = Flask(__name__)
 # BASE URL FOR USERS SERVICE, USED ONLY IF USERS_API_URL ENVIRONMENT VARIABLE IS NOT SET
 USERS_BASE_URL = "http://127.0.0.1"
 
+
 def create_app():
     '''
     Prepares initializes the application and its utilities.
@@ -48,4 +49,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run()
+    app.run(host='0.0.0.0')

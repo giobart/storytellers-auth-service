@@ -12,6 +12,6 @@ ENV PYTHONPATH .
 
 RUN pip install -r requirements.txt
 
-EXPOSE 5005
+EXPOSE 5000
 
 CMD [ "python", "auth/app.py" ]
