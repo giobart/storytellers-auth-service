@@ -1,6 +1,7 @@
 import json
 import requests
 import auth
+import logging
 
 '''
 call the user service in order to validate the current userid and the password
@@ -17,6 +18,9 @@ oterwise
 
 def api_call_user_login(username, password):
     request_body = {"username": username, "password": password}
+
+    logging.info("LOGIN WITH username:"+username)
+    
     response = requests.post(auth.api_config['USERS_BASE_URL'] + auth.api_config['USERS_VALIDATE_USERNAME_URL'],
                              json=request_body)
 

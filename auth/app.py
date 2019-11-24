@@ -4,6 +4,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from auth.views import blueprints
 import auth
+import logging
 
 app = Flask(__name__)
 
@@ -29,7 +30,7 @@ def create_app():
     else:
         auth.api_config['USERS_BASE_URL'] = USERS_BASE_URL
 
-    print("USERS_URL = " + auth.api_config['USERS_BASE_URL'])
+    logging.warning("USERS_URL = " + auth.api_config['USERS_BASE_URL'])
 
     # Set True in production environment, False only for debugging purpose
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
