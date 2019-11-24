@@ -24,7 +24,7 @@ def create_app():
 
     # SET URL OF THE USERS SERVICE
     if os.environ.get('USERS_API'):
-        auth.api_config['USERS_BASE_URL'] = os.environ.get('USERS_API_URL')
+        auth.api_config['USERS_BASE_URL'] = os.environ.get('USERS_API')
     else:
         auth.api_config['USERS_BASE_URL'] = USERS_BASE_URL
 
