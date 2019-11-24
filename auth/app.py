@@ -5,8 +5,10 @@ from flask_jwt_extended import JWTManager
 from auth.views import blueprints
 import auth
 import logging
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # BASE URL FOR USERS SERVICE, USED ONLY IF USERS_API_URL ENVIRONMENT VARIABLE IS NOT SET
 USERS_BASE_URL = "http://127.0.0.1"
