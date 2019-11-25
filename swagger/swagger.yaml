@@ -130,9 +130,9 @@ components:
     inline_response_200:
       type: object
       properties:
-        message:
-          type: string
-          example: Logged in as giobarty
+          id:
+          type: integer
+          example: 21
     inline_response_401:
       type: object
       properties:

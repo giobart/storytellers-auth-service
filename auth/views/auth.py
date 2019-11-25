@@ -36,7 +36,7 @@ def login():
         refresh_token = create_refresh_token(identity=identity)
 
         resp = jsonify({
-            'message': 'Logged in as {}'.format(user["username"]),
+            'id': identity["id"]
         })
 
         # settin cookie to the browser for access token and refresh token
