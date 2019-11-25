@@ -1,8 +1,8 @@
 import os
 
 from flask import Flask
-from flask_jwt_extended import JWTManager
 from auth.views import blueprints
+from auth.extensions import jwt
 import auth
 import logging
 from flask_cors import CORS
@@ -41,7 +41,7 @@ def create_app():
     # should likely be True
     app.config['JWT_COOKIE_SECURE'] = False
 
-    jwt = JWTManager(app)
+    jwt.init_app(app)
 
     for bp in blueprints:
         app.register_blueprint(bp)

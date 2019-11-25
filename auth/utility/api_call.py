@@ -26,13 +26,9 @@ def api_call_user_login(username, password):
 
     # If user correctly logged in then return user info otw raise exception
     if response.status_code == 200:
-        json_response = json.loads(response.json())
+        json_response = response.json()
 
-        # Double check of username and password just to be sure that request was correctly validated
-        if json_response["username"] == username and json_response["password"] == password:
-            return generate_identity(json_response)
-        else:
-            raise InvalidUser("invalid username or password")
+        return generate_identity(json_response)
     else:
         raise InvalidUser("invalid username or password")
 

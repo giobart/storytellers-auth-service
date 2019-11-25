@@ -3,11 +3,12 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
                                 get_jwt_identity, get_raw_jwt, set_access_cookies,
                                 set_refresh_cookies, unset_jwt_cookies)
 from auth.utility.api_call import *
+from auth.utility import errors
 
 auth = Blueprint('auth', __name__)
 
 
-''' 
+'''
     /login for the user, set refresh token and access token
     Tokens are composed of an identity object
     created as following:
@@ -46,9 +47,9 @@ def login():
         return resp, 200
 
     except InvalidUser as e:
-        return {'err': 'Wrong credentials'}, 401
+        return errors.response('023')
     except Exception as e:
-        return {'err': 'Something bad during auth'}, 401
+        return errors.response('041')
 
 
 ''' /logout Reset the browser cache, the current login token will expire in 15 min and the refresh token in 30 days'''
@@ -71,7 +72,7 @@ def logout():
 
         return resp, 200
     else:
-        abort(401)
+        return errors.response('041')
 
 
 ''' /token_refresh Refresh the current expired login token '''
