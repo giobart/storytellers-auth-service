@@ -1,3 +1,5 @@
 [run]
 omit =
     *app.py
+    *conf*
+    *errors.py

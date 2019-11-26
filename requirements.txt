@@ -5,4 +5,5 @@ passlib
 flask_sqlalchemy
 requests
 flask-cors
+gunicorn==20.0.0
 

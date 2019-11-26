@@ -1,7 +1,8 @@
-import json
 import requests
 import auth
 import logging
+from flask import current_app as app
+import json
 
 '''
 call the user service in order to validate the current userid and the password
@@ -19,9 +20,9 @@ oterwise
 def api_call_user_login(username, password):
     request_body = {"username": username, "password": password}
 
-    logging.info("LOGIN WITH username:"+username)
+    logging.info("LOGIN WITH username:" + username)
 
-    response = requests.post(auth.api_config['USERS_BASE_URL'] + auth.api_config['USERS_VALIDATE_USERNAME_URL'],
+    response = requests.post(app.config["USERS_ENDPOINT"] + auth.api_config['USERS_VALIDATE_USERNAME_URL'],
                              json=json.dumps(request_body))
 
     # If user correctly logged in then return user info otw raise exception
@@ -29,8 +30,10 @@ def api_call_user_login(username, password):
         json_response = response.json()
 
         return generate_identity(json_response)
-    else:
+    elif response.status_code == 401:
         raise InvalidUser("invalid username or password")
+    else:
+        raise ServerError("Server response not recognized")
 
 
 def generate_identity(user):
@@ -41,3 +44,6 @@ class InvalidUser(Exception):
     def __init__(self, value):
         self.value = value
 
+class ServerError(Exception):
+    def __init__(self, value):
+        self.value = value

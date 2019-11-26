@@ -3,43 +3,20 @@ import os
 from flask import Flask
 from auth.views import blueprints
 from auth.extensions import jwt
-import auth
-import logging
 from flask_cors import CORS
 
-app = Flask(__name__)
-CORS(app)
+__all__ = ('create_app',)
 
-# BASE URL FOR USERS SERVICE, USED ONLY IF USERS_API_URL ENVIRONMENT VARIABLE IS NOT SET
-USERS_BASE_URL = "http://127.0.0.1"
-
-
-def create_app():
+def create_app(config=None, app_name='auth'):
     '''
     Prepares initializes the application and its utilities.
     '''
 
-    # JWT TOKEN CONFIGURATION
-    app.config['SECRET_KEY'] = 'some-secret-string-CHANGE-ME'
-    app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-CHANGE-ME'
-    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-    app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
-    app.config['JWT_REFRESH_COOKIE_PATH'] = '/auth/token_refresh'
+    app = Flask(app_name)
+    CORS(app)
 
-    # SET URL OF THE USERS SERVICE
-    if os.environ.get('USERS_API'):
-        auth.api_config['USERS_BASE_URL'] = os.environ.get('USERS_API')
-    else:
-        auth.api_config['USERS_BASE_URL'] = USERS_BASE_URL
-
-    logging.warning("USERS_URL = " + auth.api_config['USERS_BASE_URL'])
-
-    # Set True in production environment, False only for debugging purpose
-    app.config['JWT_COOKIE_CSRF_PROTECT'] = False
-
-    # Only allow JWT cookies to be sent over https. In production, this
-    # should likely be True
-    app.config['JWT_COOKIE_SECURE'] = False
+    if config:
+        app.config.from_pyfile(config)
 
     jwt.init_app(app)
 
